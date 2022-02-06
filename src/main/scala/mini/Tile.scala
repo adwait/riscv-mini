@@ -8,10 +8,18 @@ import chisel3.util._
 import config.Parameters
 import junctions._
 
+class MemArbAnnoIO(implicit val p: Parameters) extends Bundle {
+  val cycle_counter = Input(UInt(p(CTRLEN).W))
+  val fe_pc = Input(UInt(p(XLEN).W))
+  val ew_pc = Input(UInt(p(XLEN).W))
+}
+
 class MemArbiterIO(implicit val p: Parameters) extends Bundle {
   val icache = Flipped(new NastiIO)
   val dcache = Flipped(new NastiIO)
   val nasti = new NastiIO
+
+  val annoIO = new MemArbAnnoIO
 }
 
 class MemArbiter(implicit p: Parameters) extends Module {
@@ -58,6 +66,12 @@ class MemArbiter(implicit p: Parameters) extends Module {
   io.nasti.r.ready := io.icache.r.ready && state === s_ICACHE_READ ||
     io.dcache.r.ready && state === s_DCACHE_READ
 
+  printf("# =======\n")
+  printf("uop_begin('module:memarbiter', 'ctrl_state', ic=%d, t=%d)\n", 0.B, io.annoIO.cycle_counter)
+  printf("write('state', %d)\n", state)
+  printf("uop_end()\n")
+  printf("# =======\n")
+
   switch(state) {
     is(s_IDLE) {
       when(io.dcache.aw.fire) {
@@ -77,10 +91,26 @@ class MemArbiter(implicit p: Parameters) extends Module {
       when(io.nasti.r.fire && io.nasti.r.bits.last) {
         state := s_IDLE
       }
+      if (p(AnnoInfo)) {
+        printf("# =======\n")
+        printf("uop_begin('module:memarbiter', 'cache_read_resp', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
+        printf("write('io.dcache.r.valid', %b)\n", io.nasti.r.valid && state === s_DCACHE_READ)
+        printf("write('io.dcache.r.bits', 0x%x)\n", io.nasti.r.bits.data)
+        printf("uop_end()\n")
+        printf("# =======\n")
+      }
     }
     is(s_DCACHE_WRITE) {
       when(io.dcache.w.fire && io.dcache.w.bits.last) {
         state := s_DCACHE_ACK
+      }
+      if (p(AnnoInfo)) {
+        printf("# =======\n")
+        printf("uop_begin('module:memarbiter', 'cache_write_req', ic=%d, t=%d)\n", io.annoIO.ew_pc, io.annoIO.cycle_counter)
+        printf("write('io.nasti.w.valid', %b)\n", io.dcache.w.valid && state === s_DCACHE_WRITE)
+        printf("write('io.nasti.w.bits', 0x%x)\n", io.dcache.w.bits.data)
+        printf("uop_end()\n")
+        printf("# =======\n")
       }
     }
     is(s_DCACHE_ACK) {
@@ -110,10 +140,37 @@ class Tile(tileParams: Parameters) extends Module with TileBase {
   val dcache = Module(new Cache)
   val arb = Module(new MemArbiter)
 
+  val cycle_counter = RegInit(0.U(p(CTRLEN).W))
+
   io.host <> core.io.host
   core.io.icache <> icache.io.cpu
   core.io.dcache <> dcache.io.cpu
   arb.io.icache <> icache.io.nasti
   arb.io.dcache <> dcache.io.nasti
   io.nasti <> arb.io.nasti
+
+  icache.io.annoIO.is_dcache := false.B
+  icache.io.annoIO.fe_pc <> core.io.annoIO.fe_pc
+  icache.io.annoIO.ew_pc <> core.io.annoIO.ew_pc
+  icache.io.annoIO.cycle_counter := cycle_counter
+
+  dcache.io.annoIO.is_dcache := true.B
+  dcache.io.annoIO.fe_pc <> core.io.annoIO.fe_pc
+  dcache.io.annoIO.ew_pc <> core.io.annoIO.ew_pc
+  dcache.io.annoIO.cycle_counter := cycle_counter
+
+  arb.io.annoIO.fe_pc <> core.io.annoIO.fe_pc
+  arb.io.annoIO.ew_pc <> core.io.annoIO.ew_pc
+  arb.io.annoIO.cycle_counter := cycle_counter
+
+  core.io.annoIO.cycle_counter := cycle_counter
+
+  cycle_counter := cycle_counter + 1.U
+
+  if (p(AnnoInfo)) {
+    printf(
+      "clock_step('module:tile', %d)\n", cycle_counter
+    )
+  }
+
 }

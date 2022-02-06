@@ -27,9 +27,17 @@ class CacheIO(implicit val p: Parameters) extends Bundle {
   val resp = Valid(new CacheResp)
 }
 
+class CacheAnnoIO(implicit val p: Parameters) extends Bundle {
+  val is_dcache = Input(Bool())
+  val cycle_counter = Input(UInt(p(CTRLEN).W))
+  val fe_pc = Input(UInt(p(XLEN).W))
+  val ew_pc = Input(UInt(p(XLEN).W))
+}
+
 class CacheModuleIO(implicit val p: Parameters) extends Bundle {
   val cpu = new CacheIO
   val nasti = new NastiIO
+  val annoIO = new CacheAnnoIO
 }
 
 trait CacheParams extends CoreParams with HasNastiParameters {
@@ -65,6 +73,8 @@ class Cache(implicit val p: Parameters) extends Module with CacheParams {
   val addr_reg = Reg(chiselTypeOf(io.cpu.req.bits.addr))
   val cpu_data = Reg(chiselTypeOf(io.cpu.req.bits.data))
   val cpu_mask = Reg(chiselTypeOf(io.cpu.req.bits.mask))
+
+  dontTouch(io.annoIO)
 
   // Counters
   require(dataBeats > 0)
@@ -128,6 +138,18 @@ class Cache(implicit val p: Parameters) extends Module with CacheParams {
         mem.write(idx_reg, data, wmask((i + 1) * wBytes - 1, i * wBytes).asBools())
         mem.suggestName(s"dataMem_${i}")
     }
+    when (io.annoIO.is_dcache) {
+      printf("# =======\n")
+      printf("# anno('module:dcache', 'cache hit', ic=%d, t=%d)\n", io.annoIO.ew_pc, io.annoIO.cycle_counter)
+      printf("uop_begin('module:dcache', 'cache_write', ic=%d, t=%d)\n", io.annoIO.ew_pc, io.annoIO.cycle_counter)
+      printf("write('wen', %b)\n", is_write && (hit || is_alloc_reg) && !io.cpu.abort || is_alloc)
+      when(is_alloc) {
+        printf("write('metadata[0x%x]', 0x%x)\n", idx_reg, wmeta.tag)
+      }
+      printf("write('data[0x%x]', 0x%x, 0b%b)\n", idx_reg, wdata, wmask)
+      printf("uop_end()\n")
+      printf("# =======\n")
+    }
   }
 
   io.nasti.ar.bits := NastiReadAddressChannel(
@@ -159,6 +181,19 @@ class Cache(implicit val p: Parameters) extends Module with CacheParams {
   // write resp
   io.nasti.b.ready := false.B
 
+  if (p(AnnoInfo)) {
+    when (io.annoIO.is_dcache) {
+      printf("# =======\n")
+      printf("# anno('module:dcache', 'cache state', state=%d)\n", state)
+      printf("# =======\n")
+    } 
+    when (!io.annoIO.is_dcache) {
+      printf("# =======\n")
+      printf("# anno('module:icache', 'cache state', state=%d)\n", state)
+      printf("# =======\n")
+    }
+  }
+
   // Cache FSM
   val is_dirty = v(idx_reg) && d(idx_reg)
   switch(state) {
@@ -181,6 +216,24 @@ class Cache(implicit val p: Parameters) extends Module with CacheParams {
           state := s_WRITE_BACK
         }.elsewhen(io.nasti.ar.fire) {
           state := s_REFILL
+        }
+      }
+
+      if (p(AnnoInfo)) {
+        when (io.annoIO.is_dcache) {
+          when (hit) {
+            printf("# =======\n")
+            printf("# anno('module:dcache', 'cache hit', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
+            printf("uop_begin('module:dcache', 'cache_read_hit', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
+            printf("write('io.cpu.resp.bits.data', 0x%x)\n", VecInit.tabulate(nWords)(i => read((i + 1) * xlen - 1, i * xlen))(off_reg))
+            printf("write('io.cpu.resp.valid', 0b%b)\n", is_idle || is_read && hit || is_alloc_reg && !cpu_mask.orR)
+            printf("uop_end()\n")
+            printf("# =======\n")
+          }.otherwise {
+            printf("# =======\n")
+            printf("# anno('module:dcache', 'cache miss', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
+            printf("# =======\n") 
+          }
         }
       }
     }
@@ -218,6 +271,23 @@ class Cache(implicit val p: Parameters) extends Module with CacheParams {
     is(s_REFILL) {
       when(read_wrap_out) {
         state := Mux(cpu_mask.orR, s_WRITE_CACHE, s_IDLE)
+      }
+      if (p(AnnoInfo)) {
+        when (io.annoIO.is_dcache) {
+          when (read_wrap_out) {
+            printf("# =======\n")
+            printf("# anno('module:dcache', 'refill', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
+            printf("# =======\n")
+
+            printf("# =======\n")
+            printf("# anno('module:dcache', 'cache hit', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
+            printf("uop_begin('module:dcache', 'cache_read_hit', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
+            printf("write('io.cpu.resp.bits.data', 0x%x)\n", VecInit.tabulate(nWords)(i => read((i + 1) * xlen - 1, i * xlen))(off_reg))
+            printf("write('io.cpu.resp.valid', 0x%x)\n", is_idle || is_read && hit || is_alloc_reg && !cpu_mask.orR)
+            printf("uop_end()\n")
+            printf("# =======\n")
+          }
+        }
       }
     }
   }

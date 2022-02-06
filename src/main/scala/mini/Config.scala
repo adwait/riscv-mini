@@ -11,6 +11,8 @@ class MiniConfig
       // Core
       case XLEN        => 32
       case Trace       => false
+      case CTRLEN      => 32       
+      case AnnoInfo    => true
       case BuildALU    => (p: Parameters) => Module(new ALUArea()(p))
       case BuildImmGen => (p: Parameters) => Module(new ImmGenWire()(p))
       case BuildBrCond => (p: Parameters) => Module(new BrCondArea()(p))

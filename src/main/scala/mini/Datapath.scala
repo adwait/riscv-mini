@@ -11,11 +11,22 @@ object Const {
   val PC_EVEC = 0x100
 }
 
+class DatapathAnnoIO(implicit val p: Parameters) extends Bundle {
+  val cycle_counter = Input(UInt(p(CTRLEN).W))
+
+  val pc = Output(UInt(p(XLEN).W))
+  val fe_pc = Output(UInt(p(XLEN).W))
+  val ew_pc = Output(UInt(p(XLEN).W))
+}
+
+
 class DatapathIO(implicit p: Parameters) extends CoreBundle()(p) {
   val host = new HostIO
   val icache = Flipped(new CacheIO)
   val dcache = Flipped(new CacheIO)
   val ctrl = Flipped(new ControlSignals)
+
+  val annoIO = new DatapathAnnoIO
 }
 
 class Datapath(implicit val p: Parameters) extends Module with CoreParams {
@@ -192,6 +203,33 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
   // Abort store when there's an excpetion
   io.dcache.abort := csr.io.expt
 
+  // Feedup PC values
+  io.annoIO.pc := pc
+  io.annoIO.fe_pc := fe_pc
+  io.annoIO.ew_pc := ew_pc
+
+  if (p(AnnoInfo)) {
+    printf("# =======\n")
+    printf("uop_begin('module:datapath', 'regs_read', ic=%d, t=%d)\n", fe_pc, io.annoIO.cycle_counter)
+    printf("# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)\n")
+    printf("# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)\n")
+    printf("read('regs[%d]', 0x%x)\n", regFile.io.raddr2, rs1)
+    printf("read('regs[%d]', 0x%x)\n", regFile.io.raddr2, rs2)
+    printf("uop_end()\n")
+    printf("# =======\n")
+  }
+  if (p(AnnoInfo)) {
+    when (regFile.io.wen) {
+      printf("# =======\n")
+      printf("uop_begin('module:datapath', 'regs_write', ic=%d, t=%d)\n", ew_pc, io.annoIO.cycle_counter)
+      printf("# 'regFile.io.waddr := wb_rd_addr\n")
+      printf("# 'regFile.io.wdata := regWrite\n")
+      printf("write('regs[%d]', 0x%x)\n", wb_rd_addr, regFile.io.wdata)
+      printf("uop_end()\n")
+      printf("# =======\n")
+    }
+  }
+  
   if (p(Trace)) {
     printf(
       "PC: %x, INST: %x, REG[%d] <- %x\n",

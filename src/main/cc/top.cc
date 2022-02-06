@@ -25,9 +25,10 @@ VerilatedVcdC* tfp;
 mm_magic_t* mem; // target memory
 
 // TODO Provide command-line options like vcd filename, timeout count, etc.
-const long timeout = 100000000L;
+const long timeout = 100; // 100000000L;
 
 void tick() {
+  cout << "clock_step(" << main_time/2 << ")" << endl;
   top->clock = 1;
   top->eval();
 #if VM_TRACE
