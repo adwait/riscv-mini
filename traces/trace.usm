@@ -1,0 +1,795 @@
+clock_step('module:tile',          0)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       508, t=         0)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',          1)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       508, t=         1)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',          2)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       508, t=         2)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',          3)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       508, t=         3)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',          4)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       508, t=         4)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       508, t=         4)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[00000]', 00000000)
+uop_end()
+# =======
+clock_step('module:tile',          5)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       512, t=         5)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00100], 00000000)
+read(regs[00100], 00000000)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       508, t=         5)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[00000]', 00000000)
+uop_end()
+# =======
+clock_step('module:tile',          6)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       516, t=         6)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01000], 00000000)
+read(regs[01000], 00000000)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       512, t=         6)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01011]', 00000064)
+uop_end()
+# =======
+clock_step('module:tile',          7)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       520, t=         7)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       516, t=         7)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01100]', 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',          8)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       524, t=         8)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',          9)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       524, t=         9)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         10)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       524, t=        10)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         11)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       524, t=        11)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       520, t=        11)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         12)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       528, t=        12)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       524, t=        12)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         13)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       532, t=        13)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       528, t=        13)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         14)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       536, t=        14)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       532, t=        14)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         15)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       540, t=        15)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         16)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       540, t=        16)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         17)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       540, t=        17)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         18)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       540, t=        18)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       536, t=        18)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         19)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       544, t=        19)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       540, t=        19)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         20)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       548, t=        20)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       544, t=        20)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         21)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       552, t=        21)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       548, t=        21)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         22)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       556, t=        22)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         23)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       556, t=        23)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         24)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       556, t=        24)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         25)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       556, t=        25)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       552, t=        25)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         26)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       560, t=        26)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       556, t=        26)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         27)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       564, t=        27)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       560, t=        27)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         28)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       568, t=        28)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       564, t=        28)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         29)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       572, t=        29)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         30)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       572, t=        30)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         31)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       572, t=        31)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         32)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       572, t=        32)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       568, t=        32)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         33)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       576, t=        33)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       572, t=        33)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         34)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       580, t=        34)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       576, t=        34)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         35)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       584, t=        35)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       580, t=        35)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         36)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       588, t=        36)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         37)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       588, t=        37)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         38)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       588, t=        38)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         39)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       588, t=        39)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       584, t=        39)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         40)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       592, t=        40)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       588, t=        40)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         41)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       596, t=        41)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       592, t=        41)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         42)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       600, t=        42)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       596, t=        42)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         43)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       604, t=        43)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         44)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       604, t=        44)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         45)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       604, t=        45)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+clock_step('module:tile',         46)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       604, t=        46)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[01100], 00000064)
+read(regs[01100], 000000c8)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       600, t=        46)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         47)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       608, t=        47)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       604, t=        47)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[01101]', 0000012c)
+uop_end()
+# =======
+clock_step('module:tile',         48)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       612, t=        48)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',         49)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       616, t=        49)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',         50)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       616, t=        50)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',         51)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       616, t=        51)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',         52)
+anno(module:icache, state:6)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       616, t=        52)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+clock_step('module:tile',         53)
+anno(module:icache, state:0)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       448, t=        53)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+# =======
+uop_begin('module:datapath', 'regs_write', ic=       616, t=        53)
+# 'regFile.io.waddr := wb_rd_addr
+# 'regFile.io.wdata := regWrite
+write('regs[00000]', 00000000)
+uop_end()
+# =======
+clock_step('module:tile',         54)
+anno(module:icache, state:1)
+anno(module:dcache, state:0)
+# =======
+uop_begin(module:datapath, regs_read, ic=       452, t=        54)
+# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
+# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
+read(regs[00000], 00000000)
+read(regs[00000], 00000000)
+uop_end()
+# =======
+Simulation terminated by timeout at time 120 (cycle 12)

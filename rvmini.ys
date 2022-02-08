@@ -1,0 +1,20 @@
+read_verilog generated-src-modules/ALUArea.v
+read_verilog generated-src-modules/BrCondArea.v
+read_verilog generated-src-modules/CSR.v
+read_verilog generated-src-modules/Cache.v
+read_verilog generated-src-modules/Control.v
+read_verilog generated-src-modules/Core.v
+read_verilog generated-src-modules/Datapath.v
+read_verilog generated-src-modules/ImmGenWire.v
+read_verilog generated-src-modules/MemArbiter.v
+read_verilog generated-src-modules/RegFile.v
+read_verilog generated-src-modules/Tile.v
+
+hierarchy -top Tile
+hierarchy -check
+
+proc; opt; fsm; opt; memory; opt
+techmap; opt
+clean
+
+write_verilog -noattr generated-src/Tile.v

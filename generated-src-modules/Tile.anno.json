@@ -1,0 +1,29 @@
+[
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~Tile|Cache",
+    "duplicate":"~Tile|Tile/icache:Cache",
+    "index":0.7272727272727273
+  },
+  {
+    "class":"firrtl.transforms.DedupedResult",
+    "original":"~Tile|Cache_1",
+    "duplicate":"~Tile|Tile/dcache:Cache",
+    "index":0.8181818181818182
+  },
+  {
+    "class":"firrtl.EmitAllModulesAnnotation",
+    "emitter":"firrtl.VerilogEmitter"
+  },
+  {
+    "class":"firrtl.transforms.BlackBoxTargetDirAnno",
+    "targetDir":"/home/adwait/Documents/research/hwlifting/rvmini/riscv-mini/generated-src"
+  },
+  {
+    "class":"firrtl.transforms.CombinationalPath",
+    "sink":"~Tile|Tile>io_nasti_w_bits_last",
+    "sources":[
+      "~Tile|Tile>io_nasti_w_ready"
+    ]
+  }
+]

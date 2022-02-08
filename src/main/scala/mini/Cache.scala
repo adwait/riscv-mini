@@ -283,7 +283,7 @@ class Cache(implicit val p: Parameters) extends Module with CacheParams {
             printf("# anno('module:dcache', 'cache hit', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
             printf("uop_begin('module:dcache', 'cache_read_hit', ic=%d, t=%d)\n", io.annoIO.fe_pc, io.annoIO.cycle_counter)
             printf("write('io.cpu.resp.bits.data', 0x%x)\n", VecInit.tabulate(nWords)(i => read((i + 1) * xlen - 1, i * xlen))(off_reg))
-            printf("write('io.cpu.resp.valid', 0x%x)\n", is_idle || is_read && hit || is_alloc_reg && !cpu_mask.orR)
+            printf("write('io.cpu.resp.valid', 0b%b)\n", is_idle || is_read && hit || is_alloc_reg && !cpu_mask.orR)
             printf("uop_end()\n")
             printf("# =======\n")
           }
