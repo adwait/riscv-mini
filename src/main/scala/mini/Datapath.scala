@@ -213,7 +213,7 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
     printf("uop_begin('module:datapath', 'regs_read', ic=%d, t=%d)\n", fe_pc, io.annoIO.cycle_counter)
     printf("# anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)\n")
     printf("# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)\n")
-    printf("read('regs[%d]', 0x%x)\n", regFile.io.raddr2, rs1)
+    printf("read('regs[%d]', 0x%x)\n", regFile.io.raddr1, rs1)
     printf("read('regs[%d]', 0x%x)\n", regFile.io.raddr2, rs2)
     printf("uop_end()\n")
     printf("# =======\n")

@@ -1,5 +1,4 @@
-from traceanalyze import *
-
+from traceanalyze import * 
 clock_step('module:tile',          0)
 # =======
 # anno('module:icache', 'cache state', state=0)
@@ -123,7 +122,7 @@ uop_end()
 uop_begin('module:datapath', 'regs_read', ic=       512, t=         5)
 # anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
 # anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
-read('regs[ 4]', 0x00000000)
+read('regs[ 0]', 0x00000000)
 read('regs[ 4]', 0x00000000)
 uop_end()
 # =======
@@ -150,7 +149,7 @@ uop_end()
 uop_begin('module:datapath', 'regs_read', ic=       516, t=         6)
 # anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
 # anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
-read('regs[11]', 0x00000000)
+read('regs[ 0]', 0x00000000)
 read('regs[11]', 0x00000064)
 uop_end()
 # =======
@@ -240,7 +239,7 @@ uop_end()
 # anno('module:dcache', 'cache hit', ic=       520, t=         9)
 uop_begin('module:dcache', 'cache_read_hit', ic=       520, t=         9)
 write('io.cpu.resp.bits.data', 0x00000000)
-write('io.cpu.resp.valid', 0x0)
+write('io.cpu.resp.valid', 0b0)
 uop_end()
 # =======
 # =======
@@ -313,8 +312,8 @@ uop_end()
 # =======
 # anno('module:dcache', 'cache hit', ic=       524, t=        12)
 uop_begin('module:dcache', 'cache_read_hit', ic=       524, t=        12)
-write('io.cpu.resp.bits.data', 0b00000000000000000000000001100100)
-write('io.cpu.resp.valid', 0x1)
+write('io.cpu.resp.bits.data', 0x00000064)
+write('io.cpu.resp.valid', 0b1)
 uop_end()
 # =======
 # =======
@@ -1279,13 +1278,6 @@ read('regs[ 0]', 0x00000000)
 read('regs[ 0]', 0x00000000)
 uop_end()
 # =======
-# =======
-uop_begin('module:datapath', 'regs_write', ic=       604, t=        52)
-# 'regFile.io.waddr := wb_rd_addr
-# 'regFile.io.wdata := regWrite
-write('regs[ 0]', 0x00000000)
-uop_end()
-# =======
 clock_step('module:tile',         53)
 # =======
 # anno('module:icache', 'cache state', state=1)
@@ -1308,18 +1300,18 @@ uop_end()
 # =======
 clock_step('module:tile',         54)
 # =======
-# anno('module:icache', 'cache state', state=1)
+# anno('module:icache', 'cache state', state=6)
 # =======
 # =======
 uop_begin('module:memarbiter', 'ctrl_state', ic=0, t=        54)
-write('state', 0)
+write('state', 1)
 uop_end()
 # =======
 # =======
 # anno('module:dcache', 'cache state', state=0)
 # =======
 # =======
-uop_begin('module:datapath', 'regs_read', ic=       616, t=        54)
+uop_begin('module:datapath', 'regs_read', ic=       612, t=        54)
 # anno(rs1 = Mux(wb_sel === WB_ALU && rs1hazard, ew_alu, regFile.io.rdata1)
 # anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)
 read('regs[ 0]', 0x00000000)
@@ -1327,4 +1319,4 @@ read('regs[ 0]', 0x00000000)
 uop_end()
 # =======
 # Simulation terminated by timeout at time 120 (cycle 12)
-finish()
+finish('tests/rv32ui-p-movldst2.hex')

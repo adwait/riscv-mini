@@ -1,3 +1,4 @@
+import os
 import pydot
 
 graph = pydot.Dot("my_graph", graph_type="digraph", bgcolor="white")
@@ -21,7 +22,8 @@ def read(signal, value):
 def uop_begin(modulename, uopname, **args):
     global label, time, nodequeue, prev_nodequeue, ic
     if args.get('t') > time:
-        prev_nodequeue = nodequeue
+        if nodequeue != []:
+            prev_nodequeue = nodequeue
         nodequeue = []
         time = args.get('t')
     ic = args.get('ic')
@@ -29,7 +31,7 @@ def uop_begin(modulename, uopname, **args):
     
 def uop_end():
     global graph, prev_nodequeue, nodequeue
-    if ic in [512, 516, 520]:
+    if ic in [512, 516]:
         newnode = pydot.Node(label, shape="rectangle")
         graph.add_node(newnode)
         for node in prev_nodequeue:
@@ -40,6 +42,8 @@ def uop_end():
 def anno():
     pass
 
-def finish(filename='outfile.png'):
+def finish(pathname='outfile.png'):
     global graph
-    graph.write_png(filename)
+    basename = os.path.basename(pathname)
+    filename = os.path.splitext(basename)[0]
+    graph.write_png(filename + '.png')
