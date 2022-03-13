@@ -34,10 +34,19 @@ class CacheAnnoIO(implicit val p: Parameters) extends Bundle {
   val ew_pc = Input(UInt(p(XLEN).W))
 }
 
+// class CacheOrderIO(implicit val p: Parameters) extends Bundle {
+//   val ts__read_mem = Input(Vec(p(NInst), UInt(p(CTRLEN).W)))
+//   val ts__write_mem = Input(Vec(p(NInst), UInt(p(CTRLEN).W)))
+//   val valid__read_mem = Input(Vec(p(NInst), UInt(p(CTRLEN).W)))
+//   val valid__write_mem = Input(Vec(p(NInst), UInt(p(CTRLEN).W)))
+// }
+
 class CacheModuleIO(implicit val p: Parameters) extends Bundle {
   val cpu = new CacheIO
   val nasti = new NastiIO
+  
   val annoIO = new CacheAnnoIO
+  // val orderIO = new CacheOrderIO
 }
 
 trait CacheParams extends CoreParams with HasNastiParameters {
@@ -138,17 +147,19 @@ class Cache(implicit val p: Parameters) extends Module with CacheParams {
         mem.write(idx_reg, data, wmask((i + 1) * wBytes - 1, i * wBytes).asBools())
         mem.suggestName(s"dataMem_${i}")
     }
-    when (io.annoIO.is_dcache) {
-      printf("# =======\n")
-      printf("# anno('module:dcache', 'cache hit', ic=%d, t=%d)\n", io.annoIO.ew_pc, io.annoIO.cycle_counter)
-      printf("uop_begin('module:dcache', 'cache_write', ic=%d, t=%d)\n", io.annoIO.ew_pc, io.annoIO.cycle_counter)
-      printf("write('wen', %b)\n", is_write && (hit || is_alloc_reg) && !io.cpu.abort || is_alloc)
-      when(is_alloc) {
-        printf("write('metadata[0x%x]', 0x%x)\n", idx_reg, wmeta.tag)
+    if (p(AnnoInfo)) {
+      when (io.annoIO.is_dcache) {
+        printf("# =======\n")
+        printf("# anno('module:dcache', 'cache hit', ic=%d, t=%d)\n", io.annoIO.ew_pc, io.annoIO.cycle_counter)
+        printf("uop_begin('module:dcache', 'cache_write', ic=%d, t=%d)\n", io.annoIO.ew_pc, io.annoIO.cycle_counter)
+        printf("write('wen', %b)\n", is_write && (hit || is_alloc_reg) && !io.cpu.abort || is_alloc)
+        when(is_alloc) {
+          printf("write('metadata[0x%x]', 0x%x)\n", idx_reg, wmeta.tag)
+        }
+        printf("write('data[0x%x]', 0x%x, 0b%b)\n", idx_reg, wdata, wmask)
+        printf("uop_end()\n")
+        printf("# =======\n")
       }
-      printf("write('data[0x%x]', 0x%x, 0b%b)\n", idx_reg, wdata, wmask)
-      printf("uop_end()\n")
-      printf("# =======\n")
     }
   }
 

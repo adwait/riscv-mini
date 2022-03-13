@@ -12,7 +12,13 @@ class MiniConfig
       case XLEN        => 32
       case Trace       => false
       case CTRLEN      => 32       
-      case AnnoInfo    => true
+      // For annotations
+      case AnnoInfo    => false
+      // For ordering annotations
+      case OrderInfo   => true
+      case TSWidth     => 4
+      case NInst       => 5
+      // Build units
       case BuildALU    => (p: Parameters) => Module(new ALUArea()(p))
       case BuildImmGen => (p: Parameters) => Module(new ImmGenWire()(p))
       case BuildBrCond => (p: Parameters) => Module(new BrCondArea()(p))

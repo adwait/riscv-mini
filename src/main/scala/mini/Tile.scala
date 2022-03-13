@@ -66,11 +66,13 @@ class MemArbiter(implicit p: Parameters) extends Module {
   io.nasti.r.ready := io.icache.r.ready && state === s_ICACHE_READ ||
     io.dcache.r.ready && state === s_DCACHE_READ
 
-  printf("# =======\n")
-  printf("uop_begin('module:memarbiter', 'ctrl_state', ic=%d, t=%d)\n", 0.B, io.annoIO.cycle_counter)
-  printf("write('state', %d)\n", state)
-  printf("uop_end()\n")
-  printf("# =======\n")
+  if (p(AnnoInfo)) {
+    printf("# =======\n")
+    printf("uop_begin('module:memarbiter', 'ctrl_state', ic=%d, t=%d)\n", 0.B, io.annoIO.cycle_counter)
+    printf("write('state', %d)\n", state)
+    printf("uop_end()\n")
+    printf("# =======\n")
+  }
 
   switch(state) {
     is(s_IDLE) {
@@ -166,6 +168,49 @@ class Tile(tileParams: Parameters) extends Module with TileBase {
   core.io.annoIO.cycle_counter := cycle_counter
 
   cycle_counter := cycle_counter + 1.U
+
+  val lft_tile_imm              = Wire(UInt(p(XLEN).W))
+  val lft_tile_regfile          = Wire(UInt((32*p(XLEN)).W))
+  val lft_tile_reg_rd1_addr_in  = Wire(UInt(5.W))
+  val lft_tile_reg_rd2_addr_in  = Wire(UInt(5.W))
+  val lft_tile_reg_rd1_data_out = Wire(UInt(p(XLEN).W))
+  val lft_tile_reg_rd2_data_out = Wire(UInt(p(XLEN).W))
+  val lft_tile_reg_wr_addr_in   = Wire(UInt(5.W))
+  val lft_tile_reg_wr_data_in   = Wire(UInt(32.W))
+  val lft_tile_alu_data_out     = Wire(UInt(32.W))
+  val lft_tile_pc               = Wire(UInt())
+  val lft_tile_fe_pc            = Wire(UInt())
+  val lft_tile_ew_pc            = Wire(UInt())
+  val lft_tile_fe_inst          = Wire(UInt())
+
+  dontTouch(lft_tile_imm)
+  dontTouch(lft_tile_regfile)
+  dontTouch(lft_tile_reg_rd1_addr_in)
+  dontTouch(lft_tile_reg_rd2_addr_in)
+  dontTouch(lft_tile_reg_rd1_data_out)
+  dontTouch(lft_tile_reg_rd2_data_out)
+  dontTouch(lft_tile_reg_wr_addr_in)
+  dontTouch(lft_tile_reg_wr_data_in)
+  dontTouch(lft_tile_alu_data_out)
+  dontTouch(lft_tile_pc)
+  dontTouch(lft_tile_fe_pc)
+  dontTouch(lft_tile_ew_pc)
+  dontTouch(lft_tile_fe_inst)
+
+  lft_tile_imm := core.io.sigIO.lft_tile_imm
+  lft_tile_regfile := core.io.sigIO.lft_tile_regfile
+  lft_tile_reg_rd1_addr_in := core.io.sigIO.lft_tile_reg_rd1_addr_in
+  lft_tile_reg_rd2_addr_in := core.io.sigIO.lft_tile_reg_rd2_addr_in
+  lft_tile_reg_rd1_data_out := core.io.sigIO.lft_tile_reg_rd1_data_out
+  lft_tile_reg_rd2_data_out := core.io.sigIO.lft_tile_reg_rd2_data_out
+  lft_tile_reg_wr_addr_in := core.io.sigIO.lft_tile_reg_wr_addr_in
+  lft_tile_reg_wr_data_in := core.io.sigIO.lft_tile_reg_wr_data_in
+  lft_tile_alu_data_out := core.io.sigIO.lft_tile_alu_data_out
+  lft_tile_pc := core.io.sigIO.lft_tile_pc
+  lft_tile_fe_pc := core.io.sigIO.lft_tile_fe_pc
+  lft_tile_ew_pc := core.io.sigIO.lft_tile_ew_pc
+  lft_tile_fe_inst := core.io.sigIO.lft_tile_fe_inst
+
 
   if (p(AnnoInfo)) {
     printf(

@@ -1,0 +1,31 @@
+[tasks]
+taskBMC task_bmc task_corr
+taskProve task_prove task_corr
+
+[options]
+task_prove: 
+mode prove
+--
+
+task_bmc:
+mode bmc
+depth 15
+--
+
+[engines]
+task_bmc: 
+smtbmc boolector
+--
+
+[script]
+task_corr:
+read -formal Tile.v
+prep -top Tile
+--
+
+
+[files]
+task_corr:
+Tile.v
+Formal.v
+--

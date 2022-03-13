@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 
   // reset
   top->reset = 1;
-  for (size_t i = 0; i < 5 ; i++) {
+  for (size_t i = 0; i < 2 ; i++) {
     tick();
   }
 

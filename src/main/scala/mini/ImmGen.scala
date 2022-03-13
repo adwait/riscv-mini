@@ -11,7 +11,15 @@ class ImmGenIO(implicit p: Parameters) extends CoreBundle()(p) {
   val inst = Input(UInt(xlen.W))
   val sel = Input(UInt(3.W))
   val out = Output(UInt(xlen.W))
+
+  val annoIO = new ImmGenAnnoIO
 }
+
+class ImmGenAnnoIO(implicit val p: Parameters) extends Bundle {
+  val cycle_counter = Input(UInt(p(CTRLEN).W))
+  val pc = Input(UInt(p(XLEN).W))
+}
+
 
 abstract class ImmGen(implicit p: Parameters) extends Module {
   val io = IO(new ImmGenIO)
@@ -30,6 +38,24 @@ class ImmGenWire(implicit p: Parameters) extends ImmGen()(p) {
     Iimm & (-2).S,
     Seq(IMM_I -> Iimm, IMM_S -> Simm, IMM_B -> Bimm, IMM_U -> Uimm, IMM_J -> Jimm, IMM_Z -> Zimm)
   ).asUInt
+
+  
+  if(p(AnnoInfo)) {
+    when (io.sel === IMM_I) {
+      printf("# =======\n")
+      printf("uop_begin('module:immgen', 'decode_i_imm', ic=%d, t=%d)\n", io.annoIO.pc, io.annoIO.cycle_counter)
+      printf("write('io.out', 0x%x)\n", Iimm)
+      printf("uop_end()\n")
+      printf("# =======\n")
+    }.elsewhen (io.sel === IMM_S) {
+      printf("# =======\n")
+      printf("uop_begin('module:immgen', 'decode_s_imm', ic=%d, t=%d)\n", io.annoIO.pc, io.annoIO.cycle_counter)
+      printf("write('io.out', 0x%x)\n", Simm)
+      printf("uop_end()\n")
+      printf("# =======\n")
+    }
+  }
+
 }
 
 class ImmGenMux(implicit p: Parameters) extends ImmGen()(p) {

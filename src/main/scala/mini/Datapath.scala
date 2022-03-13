@@ -19,6 +19,27 @@ class DatapathAnnoIO(implicit val p: Parameters) extends Bundle {
   val ew_pc = Output(UInt(p(XLEN).W))
 }
 
+class DatapathOrderInfoIO(implicit val p : Parameters) extends Bundle {
+  val ts__decode_rs_addr = Output(Vec(p(NInst), UInt(p(CTRLEN).W)))
+  val valid__decode_rs_addr = Output(Vec(p(NInst), Bool()))
+}
+
+
+class DatapathAbstractSignalsIO(implicit val p: Parameters) extends Bundle {
+  val lft_tile_imm              = Output(UInt(p(XLEN).W))
+  val lft_tile_regfile          = Output(UInt((32*p(XLEN)).W))
+  val lft_tile_reg_rd1_addr_in  = Output(UInt(5.W))
+  val lft_tile_reg_rd2_addr_in  = Output(UInt(5.W))
+  val lft_tile_reg_rd1_data_out = Output(UInt(p(XLEN).W))
+  val lft_tile_reg_rd2_data_out = Output(UInt(p(XLEN).W))
+  val lft_tile_reg_wr_addr_in   = Output(UInt(5.W))
+  val lft_tile_reg_wr_data_in   = Output(UInt(32.W))
+  val lft_tile_alu_data_out     = Output(UInt(32.W))
+  val lft_tile_pc               = Output(UInt())
+  val lft_tile_fe_pc            = Output(UInt())
+  val lft_tile_ew_pc            = Output(UInt())
+  val lft_tile_fe_inst          = Output(UInt())
+}
 
 class DatapathIO(implicit p: Parameters) extends CoreBundle()(p) {
   val host = new HostIO
@@ -27,6 +48,7 @@ class DatapathIO(implicit p: Parameters) extends CoreBundle()(p) {
   val ctrl = Flipped(new ControlSignals)
 
   val annoIO = new DatapathAnnoIO
+  val sigIO = new DatapathAbstractSignalsIO
 }
 
 class Datapath(implicit val p: Parameters) extends Module with CoreParams {
@@ -110,9 +132,12 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
   regFile.io.raddr1 := rs1_addr
   regFile.io.raddr2 := rs2_addr
 
-  // gen immdeates
+  // gen immediates
   immGen.io.inst := fe_inst
   immGen.io.sel := io.ctrl.imm_sel
+  // Pass anno harness along
+  immGen.io.annoIO.cycle_counter := io.annoIO.cycle_counter
+  immGen.io.annoIO.pc := pc
 
   // bypass
   val wb_rd_addr = ew_inst(11, 7)
@@ -200,7 +225,7 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
   regFile.io.waddr := wb_rd_addr
   regFile.io.wdata := regWrite
 
-  // Abort store when there's an excpetion
+  // Abort store when there's an exception
   io.dcache.abort := csr.io.expt
 
   // Feedup PC values
@@ -208,6 +233,62 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
   io.annoIO.fe_pc := fe_pc
   io.annoIO.ew_pc := ew_pc
 
+  // Abstract signal harnessing
+  io.sigIO.lft_tile_imm               <> immGen.io.out  
+  io.sigIO.lft_tile_regfile           <> regFile.io.sigIO.lft_tile_regfile
+  io.sigIO.lft_tile_reg_rd1_addr_in   := rs1_addr
+  io.sigIO.lft_tile_reg_rd2_addr_in   := rs2_addr
+  io.sigIO.lft_tile_reg_rd1_data_out  := rs1
+  io.sigIO.lft_tile_reg_rd2_data_out  := rs2
+  io.sigIO.lft_tile_reg_wr_addr_in    := wb_rd_addr
+  io.sigIO.lft_tile_reg_wr_data_in    := regWrite
+  io.sigIO.lft_tile_alu_data_out      := alu.io.out
+  io.sigIO.lft_tile_pc                := pc
+  io.sigIO.lft_tile_fe_pc             := fe_pc
+  io.sigIO.lft_tile_ew_pc             := ew_pc
+  io.sigIO.lft_tile_fe_inst           := fe_inst
+
+
+  // val nInst = p(NInst)
+  if (p(OrderInfo)) {
+    val ts__decode_rs_addr    = Reg(UInt(p(CTRLEN).W))
+    val ic__decode_rs_addr    = Reg(UInt(p(XLEN).W))
+    val valid__decode_rs_addr = RegInit(false.B)
+    val ts__decode_i_imm      = Reg(UInt(p(CTRLEN).W))
+    val ic__decode_i_imm      = Reg(UInt(p(XLEN).W))
+    val valid__decode_i_imm   = RegInit(false.B)
+    dontTouch(ts__decode_rs_addr)
+    dontTouch(valid__decode_rs_addr)
+    dontTouch(ic__decode_rs_addr)
+    dontTouch(ts__decode_i_imm)
+    dontTouch(valid__decode_i_imm)
+    dontTouch(ic__decode_i_imm)
+
+    // io.orderIO.ts__decode_rs_addr := ts__decode_rs_addr
+    // io.orderIO.valid__decode_rs_addr := valid__decode_rs_addr
+    // io.orderIO.ic__decode_rs_addr := ic__decode_rs_addr
+
+    // io.orderIO.ts__decode_i_imm := ts__decode_i_imm
+    // io.orderIO.valid__decode_i_imm := valid__decode_i_imm
+    // io.orderIO.ic__decode_i_imm := ic__decode_i_imm
+
+    //   when (true.B) {
+    //     ts__decode_rs_addr        := io.annoIO.cycle_counter
+    //     ic__decode_rs_addr        := fe_pc
+    //     valid__decode_rs_addr(0)  := true.B
+    //   }.otherwise {
+    //     valid__decode_rs_addr(0)  := false.B
+    //   }
+  }
+
+
+  if (p(AnnoInfo)) {
+    printf("# =======\n")
+    printf("uop_begin('module:datapath', 'feed__inst__mem_addr_wr_in', ic=%d, t=%d)\n", fe_pc, io.annoIO.cycle_counter)
+    printf("write('io.dcache.req.bits.addr', 0x%x)\n", daddr)
+    printf("uop_end()\n")
+    printf("# =======\n")
+  }
   if (p(AnnoInfo)) {
     printf("# =======\n")
     printf("uop_begin('module:datapath', 'regs_read', ic=%d, t=%d)\n", fe_pc, io.annoIO.cycle_counter)
@@ -215,6 +296,21 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
     printf("# anno(rs2 = Mux(wb_sel === WB_ALU && rs2hazard, ew_alu, regFile.io.rdata2)\n")
     printf("read('regs[%d]', 0x%x)\n", regFile.io.raddr1, rs1)
     printf("read('regs[%d]', 0x%x)\n", regFile.io.raddr2, rs2)
+    printf("uop_end()\n")
+    printf("# =======\n")
+  }
+  if (p(AnnoInfo)) {
+    printf("# =======\n")
+    printf("uop_begin('module:datapath', 'decode_rs_addr', ic=%d, t=%d)\n", fe_pc, io.annoIO.cycle_counter)
+    printf("write('rs1_addr', 0x%x)\n", fe_inst(19, 15))
+    printf("write('rs2_addr', 0x%x)\n", fe_inst(24, 20))
+    printf("uop_end()\n")
+    printf("# =======\n")
+  }
+  if (p(AnnoInfo)) {
+    printf("# =======\n")
+    printf("uop_begin('module:datapath', 'decode_rd_addr', ic=%d, t=%d)\n", fe_pc, io.annoIO.cycle_counter)
+    printf("write('rd_addr', 0x%x)\n", fe_inst(11, 7))
     printf("uop_end()\n")
     printf("# =======\n")
   }

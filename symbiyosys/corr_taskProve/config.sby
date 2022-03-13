@@ -1,0 +1,14 @@
+[options]
+mode prove
+
+
+[engines]
+
+[script]
+read -formal Tile.v
+prep -top Tile
+
+
+[files]
+Tile.v
+Formal.v
