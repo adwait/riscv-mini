@@ -3,6 +3,7 @@ default: compile
 base_dir   = $(abspath .)
 src_dir    = $(base_dir)/src/main
 gen_dir    = $(base_dir)/generated-src
+gen_dir_coretop    = $(base_dir)/generated-src-coretop
 out_dir    = $(base_dir)/outputs
 
 SBT       = sbt
@@ -16,6 +17,9 @@ compile: $(gen_dir)/Tile.v
 $(gen_dir)/Tile.v: $(wildcard $(src_dir)/scala/mini/*.scala)
 	$(SBT) $(SBT_FLAGS) "run $(gen_dir)"
 
+$(gen_dir_coretop)/CoreTop.v: $(wildcard $(src_dir)/scala/mini/*.scala)
+	$(SBT) $(SBT_FLAGS) "run $(gen_dir_coretop)"
+
 CXXFLAGS += -std=c++11 -Wall -Wno-unused-variable
 
 # compile verilator
@@ -24,11 +28,21 @@ VERILATOR_FLAGS = --assert -Wno-STMTDLY -O3 --trace \
 	--top-module Tile -Mdir $(gen_dir)/VTile.csrc \
 	-CFLAGS "$(CXXFLAGS) -include $(gen_dir)/VTile.csrc/VTile.h" 
 
+VERILATOR_FLAGS_C = --assert -Wno-STMTDLY -O3 --trace \
+	--top-module CoreTop -Mdir $(gen_dir_coretop)/CoreTop.csrc \
+	-CFLAGS "$(CXXFLAGS) -include $(gen_dir_coretop)/CoreTop.csrc/VCoreTop.h" 
+
 $(base_dir)/VTile: $(gen_dir)/Tile.v $(src_dir)/cc/top.cc $(src_dir)/cc/mm.cc $(src_dir)/cc/mm.h
 	$(VERILATOR) $(VERILATOR_FLAGS) -o $@ $< $(word 2, $^) $(word 3, $^)
 	$(MAKE) -C $(gen_dir)/VTile.csrc -f VTile.mk
 
+$(base_dir)/VCoreTop: $(gen_dir_coretop)/CoreTop.v $(src_dir)/cc/coretop.cc
+	$(VERILATOR) $(VERILATOR_FLAGS_C) -o $@ $< $(word 2, $^) $(word 3, $^)
+	$(MAKE) -C $(gen_dir_coretop)/CoreTop.csrc -f VCoreTop.mk
+
 verilator: $(base_dir)/VTile
+
+verilatorC: $(base_dir)/VCoreTop
 
 # isa tests + benchmarks with verilator
 test_hex_files = $(wildcard $(base_dir)/tests/*.hex)

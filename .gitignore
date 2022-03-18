@@ -29,3 +29,7 @@ riscv-tools-priv1.7
 novas_dump.log
 ucli.key
 
+
+generated-src-coretop
+traces
+symbiyosys/corr_*

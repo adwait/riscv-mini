@@ -1,4 +1,0 @@
-SBY 20:35:27 [corr_taskBMC] Removing directory 'corr_taskBMC'.
-SBY 20:36:49 [corr_taskProve] Removing directory 'corr_taskProve'.
-SBY 20:36:49 [corr_taskProve] ERROR: Config file is lacking engine configuration.
-SBY 20:36:49 [corr_taskProve] DONE (ERROR, rc=16)

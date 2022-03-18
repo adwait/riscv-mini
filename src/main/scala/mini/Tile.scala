@@ -151,24 +151,28 @@ class Tile(tileParams: Parameters) extends Module with TileBase {
   arb.io.dcache <> dcache.io.nasti
   io.nasti <> arb.io.nasti
 
+  // ICache Annotations
   icache.io.annoIO.is_dcache := false.B
   icache.io.annoIO.fe_pc <> core.io.annoIO.fe_pc
   icache.io.annoIO.ew_pc <> core.io.annoIO.ew_pc
   icache.io.annoIO.cycle_counter := cycle_counter
-
+  // DCache Annotations
   dcache.io.annoIO.is_dcache := true.B
   dcache.io.annoIO.fe_pc <> core.io.annoIO.fe_pc
   dcache.io.annoIO.ew_pc <> core.io.annoIO.ew_pc
   dcache.io.annoIO.cycle_counter := cycle_counter
-
+  // MemArb Annotations
   arb.io.annoIO.fe_pc <> core.io.annoIO.fe_pc
   arb.io.annoIO.ew_pc <> core.io.annoIO.ew_pc
   arb.io.annoIO.cycle_counter := cycle_counter
-
+  // Core Annotations
   core.io.annoIO.cycle_counter := cycle_counter
-
+  // counter
   cycle_counter := cycle_counter + 1.U
 
+  // =====================
+  // Raised signals
+  // =====================
   val lft_tile_imm              = Wire(UInt(p(XLEN).W))
   val lft_tile_regfile          = Wire(UInt((32*p(XLEN)).W))
   val lft_tile_reg_rd1_addr_in  = Wire(UInt(5.W))
@@ -210,7 +214,7 @@ class Tile(tileParams: Parameters) extends Module with TileBase {
   lft_tile_fe_pc := core.io.sigIO.lft_tile_fe_pc
   lft_tile_ew_pc := core.io.sigIO.lft_tile_ew_pc
   lft_tile_fe_inst := core.io.sigIO.lft_tile_fe_inst
-
+  // =====================
 
   if (p(AnnoInfo)) {
     printf(

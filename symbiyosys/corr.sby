@@ -9,7 +9,7 @@ mode prove
 
 task_bmc:
 mode bmc
-depth 15
+depth 17
 --
 
 [engines]
