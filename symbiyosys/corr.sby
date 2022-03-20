@@ -1,6 +1,10 @@
 [tasks]
 taskBMC task_bmc task_corr
+taskBMC_core task_bmc task_corr_core
+taskBMC_coreext task_bmc task_corr_coreext
 taskProve task_prove task_corr
+taskProve_core task_prove task_corr_core
+taskProve_coreext task_prove task_corr_coreext
 
 [options]
 task_prove: 
@@ -17,10 +21,25 @@ task_bmc:
 smtbmc boolector
 --
 
+task_prove:
+abc pdr
+--
+
 [script]
 task_corr:
 read -formal Tile.v
 prep -top Tile
+--
+
+task_corr_core:
+read -formal CoreTop.v
+prep -top CoreTop
+--
+
+task_corr_coreext:
+read -formal FormalCoreTop.v
+read -formal CoreTop.v
+prep -top FormalCoreTop
 --
 
 
@@ -28,4 +47,14 @@ prep -top Tile
 task_corr:
 Tile.v
 Formal.v
+--
+
+task_corr_core:
+CoreTop.v
+FormalCore.v
+--
+
+task_corr_coreext:
+CoreTop.v
+FormalCoreTop.v
 --

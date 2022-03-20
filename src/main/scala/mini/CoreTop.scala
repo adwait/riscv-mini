@@ -14,6 +14,26 @@ class CoreTopIO(implicit val p : Parameters) extends Bundle with CoreParams {
   val io_icache_resp_valid = Input(Bool())
   val io_icache_resp_bits_data = Input(UInt(32.W))
   val host  = new HostIO
+
+  val sigIO = new CoreTopAbstractSignalIO
+}
+
+class CoreTopAbstractSignalIO(implicit val p : Parameters) extends Bundle with CoreParams {
+  val lft_tile_imm = Output(UInt(p(XLEN).W))
+  val lft_tile_regfile = Output(UInt((32*p(XLEN)).W))
+  val lft_tile_reg_rd1_addr_in = Output(UInt(5.W))
+  val lft_tile_reg_rd2_addr_in = Output(UInt(5.W))
+  val lft_tile_reg_rd1_data_out = Output(UInt(p(XLEN).W))
+  val lft_tile_reg_rd2_data_out = Output(UInt(p(XLEN).W))
+  val lft_tile_reg_wr_addr_in = Output(UInt(5.W))
+  val lft_tile_reg_wr_data_in = Output(UInt(32.W))
+  val lft_tile_alu_data_out = Output(UInt(32.W))
+  val lft_tile_npc = Output(UInt())
+  val lft_tile_pc = Output(UInt())
+  val lft_tile_fe_pc = Output(UInt())
+  val lft_tile_ew_pc = Output(UInt())
+  val lft_tile_inst = Output(UInt())
+  val lft_tile_fe_inst = Output(UInt())
 }
 
 class FakeDCache(implicit val p : Parameters) extends Module with CoreParams {
@@ -68,48 +88,49 @@ class CoreTop(coreParams : Parameters) extends Module {
   // =====================
   // Raised signals
   // =====================
-  val lft_tile_imm              = Wire(UInt(p(XLEN).W))
-  val lft_tile_regfile          = Wire(UInt((32*p(XLEN)).W))
-  val lft_tile_reg_rd1_addr_in  = Wire(UInt(5.W))
-  val lft_tile_reg_rd2_addr_in  = Wire(UInt(5.W))
-  val lft_tile_reg_rd1_data_out = Wire(UInt(p(XLEN).W))
-  val lft_tile_reg_rd2_data_out = Wire(UInt(p(XLEN).W))
-  val lft_tile_reg_wr_addr_in   = Wire(UInt(5.W))
-  val lft_tile_reg_wr_data_in   = Wire(UInt(32.W))
-  val lft_tile_alu_data_out     = Wire(UInt(32.W))
-  val lft_tile_pc               = Wire(UInt())
-  val lft_tile_fe_pc            = Wire(UInt())
-  val lft_tile_ew_pc            = Wire(UInt())
-  val lft_tile_fe_inst          = Wire(UInt())
+  // val lft_tile_imm              = Wire(UInt(p(XLEN).W))
+  // val lft_tile_regfile          = Wire(UInt((32*p(XLEN)).W))
+  // val lft_tile_reg_rd1_addr_in  = Wire(UInt(5.W))
+  // val lft_tile_reg_rd2_addr_in  = Wire(UInt(5.W))
+  // val lft_tile_reg_rd1_data_out = Wire(UInt(p(XLEN).W))
+  // val lft_tile_reg_rd2_data_out = Wire(UInt(p(XLEN).W))
+  // val lft_tile_reg_wr_addr_in   = Wire(UInt(5.W))
+  // val lft_tile_reg_wr_data_in   = Wire(UInt(32.W))
+  // val lft_tile_alu_data_out     = Wire(UInt(32.W))
+  // val lft_tile_pc               = Wire(UInt())
+  // val lft_tile_fe_pc            = Wire(UInt())
+  // val lft_tile_ew_pc            = Wire(UInt())
+  // val lft_tile_fe_inst          = Wire(UInt())
 
-  dontTouch(lft_tile_imm)
-  dontTouch(lft_tile_regfile)
-  dontTouch(lft_tile_reg_rd1_addr_in)
-  dontTouch(lft_tile_reg_rd2_addr_in)
-  dontTouch(lft_tile_reg_rd1_data_out)
-  dontTouch(lft_tile_reg_rd2_data_out)
-  dontTouch(lft_tile_reg_wr_addr_in)
-  dontTouch(lft_tile_reg_wr_data_in)
-  dontTouch(lft_tile_alu_data_out)
-  dontTouch(lft_tile_pc)
-  dontTouch(lft_tile_fe_pc)
-  dontTouch(lft_tile_ew_pc)
-  dontTouch(lft_tile_fe_inst)
+  // dontTouch(lft_tile_imm)
+  // dontTouch(lft_tile_regfile)
+  // dontTouch(lft_tile_reg_rd1_addr_in)
+  // dontTouch(lft_tile_reg_rd2_addr_in)
+  // dontTouch(lft_tile_reg_rd1_data_out)
+  // dontTouch(lft_tile_reg_rd2_data_out)
+  // dontTouch(lft_tile_reg_wr_addr_in)
+  // dontTouch(lft_tile_reg_wr_data_in)
+  // dontTouch(lft_tile_alu_data_out)
+  // dontTouch(lft_tile_pc)
+  // dontTouch(lft_tile_fe_pc)
+  // dontTouch(lft_tile_ew_pc)
+  // dontTouch(lft_tile_fe_inst)
 
-  lft_tile_imm := core.io.sigIO.lft_tile_imm
-  lft_tile_regfile := core.io.sigIO.lft_tile_regfile
-  lft_tile_reg_rd1_addr_in := core.io.sigIO.lft_tile_reg_rd1_addr_in
-  lft_tile_reg_rd2_addr_in := core.io.sigIO.lft_tile_reg_rd2_addr_in
-  lft_tile_reg_rd1_data_out := core.io.sigIO.lft_tile_reg_rd1_data_out
-  lft_tile_reg_rd2_data_out := core.io.sigIO.lft_tile_reg_rd2_data_out
-  lft_tile_reg_wr_addr_in := core.io.sigIO.lft_tile_reg_wr_addr_in
-  lft_tile_reg_wr_data_in := core.io.sigIO.lft_tile_reg_wr_data_in
-  lft_tile_alu_data_out := core.io.sigIO.lft_tile_alu_data_out
-  lft_tile_pc := core.io.sigIO.lft_tile_pc
-  lft_tile_fe_pc := core.io.sigIO.lft_tile_fe_pc
-  lft_tile_ew_pc := core.io.sigIO.lft_tile_ew_pc
-  lft_tile_fe_inst := core.io.sigIO.lft_tile_fe_inst
+  io.sigIO.lft_tile_imm := core.io.sigIO.lft_tile_imm
+  io.sigIO.lft_tile_regfile := core.io.sigIO.lft_tile_regfile
+  io.sigIO.lft_tile_reg_rd1_addr_in := core.io.sigIO.lft_tile_reg_rd1_addr_in
+  io.sigIO.lft_tile_reg_rd2_addr_in := core.io.sigIO.lft_tile_reg_rd2_addr_in
+  io.sigIO.lft_tile_reg_rd1_data_out := core.io.sigIO.lft_tile_reg_rd1_data_out
+  io.sigIO.lft_tile_reg_rd2_data_out := core.io.sigIO.lft_tile_reg_rd2_data_out
+  io.sigIO.lft_tile_reg_wr_addr_in := core.io.sigIO.lft_tile_reg_wr_addr_in
+  io.sigIO.lft_tile_reg_wr_data_in := core.io.sigIO.lft_tile_reg_wr_data_in
+  io.sigIO.lft_tile_alu_data_out := core.io.sigIO.lft_tile_alu_data_out
+  io.sigIO.lft_tile_npc := core.io.sigIO.lft_tile_npc
+  io.sigIO.lft_tile_pc := core.io.sigIO.lft_tile_pc
+  io.sigIO.lft_tile_fe_pc := core.io.sigIO.lft_tile_fe_pc
+  io.sigIO.lft_tile_ew_pc := core.io.sigIO.lft_tile_ew_pc
+  io.sigIO.lft_tile_inst := core.io.sigIO.lft_tile_inst
+  io.sigIO.lft_tile_fe_inst := core.io.sigIO.lft_tile_fe_inst
+  
   // =====================
-
-
 }

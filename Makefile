@@ -1,10 +1,11 @@
 default: compile
 
-base_dir   = $(abspath .)
-src_dir    = $(base_dir)/src/main
-gen_dir    = $(base_dir)/generated-src
+base_dir   	= $(abspath .)
+src_dir    	= $(base_dir)/src/main
+gen_dir    	= $(base_dir)/generated-src
 gen_dir_coretop    = $(base_dir)/generated-src-coretop
-out_dir    = $(base_dir)/outputs
+out_dir    	= $(base_dir)/outputs
+symb_dir	= $(base_dir)/symbiyosys
 
 SBT       = sbt
 SBT_FLAGS = -ivy $(base_dir)/.ivy2
@@ -13,6 +14,8 @@ sbt:
 	$(SBT) $(SBT_FLAGS)
 
 compile: $(gen_dir)/Tile.v
+
+compileC: $(gen_dir_coretop)/CoreTop.v
 
 $(gen_dir)/Tile.v: $(wildcard $(src_dir)/scala/mini/*.scala)
 	$(SBT) $(SBT_FLAGS) "run $(gen_dir)"
@@ -29,7 +32,7 @@ VERILATOR_FLAGS = --assert -Wno-STMTDLY -O3 --trace \
 	-CFLAGS "$(CXXFLAGS) -include $(gen_dir)/VTile.csrc/VTile.h" 
 
 VERILATOR_FLAGS_C = --assert -Wno-STMTDLY -O3 --trace \
-	--top-module CoreTop -Mdir $(gen_dir_coretop)/CoreTop.csrc \
+	--top-module CoreTop -I$(symb_dir) -Mdir $(gen_dir_coretop)/CoreTop.csrc \
 	-CFLAGS "$(CXXFLAGS) -include $(gen_dir_coretop)/CoreTop.csrc/VCoreTop.h" 
 
 $(base_dir)/VTile: $(gen_dir)/Tile.v $(src_dir)/cc/top.cc $(src_dir)/cc/mm.cc $(src_dir)/cc/mm.h

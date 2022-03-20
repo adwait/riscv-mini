@@ -35,9 +35,11 @@ class DatapathAbstractSignalsIO(implicit val p: Parameters) extends Bundle {
   val lft_tile_reg_wr_addr_in   = Output(UInt(5.W))
   val lft_tile_reg_wr_data_in   = Output(UInt(32.W))
   val lft_tile_alu_data_out     = Output(UInt(32.W))
+  val lft_tile_npc              = Output(UInt())
   val lft_tile_pc               = Output(UInt())
   val lft_tile_fe_pc            = Output(UInt())
   val lft_tile_ew_pc            = Output(UInt())
+  val lft_tile_inst             = Output(UInt())
   val lft_tile_fe_inst          = Output(UInt())
 }
 
@@ -113,6 +115,8 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
   io.icache.req.bits.mask := 0.U
   io.icache.req.valid := !stall
   io.icache.abort := false.B
+
+  dontTouch(inst)
 
   // Pipelining
   when(!stall) {
@@ -243,9 +247,11 @@ class Datapath(implicit val p: Parameters) extends Module with CoreParams {
   io.sigIO.lft_tile_reg_wr_addr_in    := wb_rd_addr
   io.sigIO.lft_tile_reg_wr_data_in    := regWrite
   io.sigIO.lft_tile_alu_data_out      := alu.io.out
+  io.sigIO.lft_tile_npc               := npc
   io.sigIO.lft_tile_pc                := pc
   io.sigIO.lft_tile_fe_pc             := fe_pc
   io.sigIO.lft_tile_ew_pc             := ew_pc
+  io.sigIO.lft_tile_inst              := inst
   io.sigIO.lft_tile_fe_inst           := fe_inst
 
 

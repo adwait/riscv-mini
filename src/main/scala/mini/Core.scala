@@ -53,9 +53,11 @@ class CoreAbstractSignalsIO(implicit val p: Parameters) extends Bundle {
   val lft_tile_reg_wr_addr_in   = Output(UInt(5.W))
   val lft_tile_reg_wr_data_in   = Output(UInt(32.W))
   val lft_tile_alu_data_out     = Output(UInt(32.W))
+  val lft_tile_npc              = Output(UInt())
   val lft_tile_pc               = Output(UInt())
   val lft_tile_fe_pc            = Output(UInt())
   val lft_tile_ew_pc            = Output(UInt())
+  val lft_tile_inst             = Output(UInt())
   val lft_tile_fe_inst          = Output(UInt())
 }
 
@@ -93,8 +95,10 @@ class Core(implicit val p: Parameters) extends Module with CoreParams {
   io.sigIO.lft_tile_reg_wr_addr_in <> dpath.io.sigIO.lft_tile_reg_wr_addr_in
   io.sigIO.lft_tile_reg_wr_data_in <> dpath.io.sigIO.lft_tile_reg_wr_data_in
   io.sigIO.lft_tile_alu_data_out <> dpath.io.sigIO.lft_tile_alu_data_out
+  io.sigIO.lft_tile_npc <> dpath.io.sigIO.lft_tile_npc
   io.sigIO.lft_tile_pc <> dpath.io.sigIO.lft_tile_pc
   io.sigIO.lft_tile_fe_pc <> dpath.io.sigIO.lft_tile_fe_pc
   io.sigIO.lft_tile_ew_pc <> dpath.io.sigIO.lft_tile_ew_pc
+  io.sigIO.lft_tile_inst <> dpath.io.sigIO.lft_tile_inst
   io.sigIO.lft_tile_fe_inst <> dpath.io.sigIO.lft_tile_fe_inst
 }
