@@ -1,0 +1,52 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Sun Mar 20 01:08:21 2022
+[*]
+[dumpfile] "\\wsl$\Ubuntu-18.04\home\adwait\Documents\research\liftingmaster\hwlifting\rvmini\riscv-mini\symbiyosys\corr_taskProve_coreext\engine_0\trace.vcd"
+[dumpfile_mtime] "Sun Mar 20 00:36:06 2022"
+[dumpfile_size] 582738
+[savefile] "\\wsl$\Ubuntu-18.04\home\adwait\Documents\research\liftingmaster\hwlifting\rvmini\riscv-mini\gtkwave\fv_signals_pdr.gtkw"
+[timestart] 0
+[size] 1920 1017
+[pos] -1 -1
+*-4.282816 45 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] FormalCoreTop.
+[treeopen] FormalCoreTop.coretop.
+[treeopen] FormalCoreTop.coretop.core.
+[treeopen] FormalCoreTop.coretop.core.dpath.
+[sst_width] 223
+[signals_width] 350
+[sst_expanded] 1
+[sst_vpaned_height] 302
+@28
+FormalCoreTop.clock
+FormalCoreTop.reset
+@22
+FormalCoreTop.coretop.core.dpath.npc[32:0]
+FormalCoreTop.coretop.core.dpath.pc[32:0]
+FormalCoreTop.coretop.core.dpath.fe_pc[32:0]
+FormalCoreTop.coretop.core.dpath.ew_pc[32:0]
+@23
+FormalCoreTop.coretop.core.dpath.fe_inst[31:0]
+@22
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_imm[31:0]
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_reg_rd1_addr_in[4:0]
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_reg_rd1_data_out[31:0]
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_reg_rd2_addr_in[4:0]
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_reg_rd2_data_out[31:0]
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_reg_wr_addr_in[4:0]
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_reg_wr_data_in[31:0]
+[color] 2
+FormalCoreTop.coretop.core.dpath.io_sigIO_lft_tile_alu_data_out[31:0]
+FormalCoreTop.coretop.core.dpath.regFile.regs<0c>[31:0]
+FormalCoreTop.coretop.core.dpath.immGen_io_inst[31:0]
+FormalCoreTop.coretop.core.dpath.io_ctrl_inst[31:0]
+[pattern_trace] 1
+[pattern_trace] 0

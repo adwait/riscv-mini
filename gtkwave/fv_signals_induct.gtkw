@@ -1,0 +1,46 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Mon Mar 21 00:16:24 2022
+[*]
+[dumpfile] "\\wsl$\Ubuntu-18.04\home\adwait\Documents\research\liftingmaster\hwlifting\rvmini\riscv-mini\symbiyosys\corr_taskInduct_coreext\engine_0\trace.vcd"
+[dumpfile_mtime] "Sun Mar 20 06:20:53 2022"
+[dumpfile_size] 481535
+[savefile] "\\wsl$\Ubuntu-18.04\home\adwait\Documents\research\liftingmaster\hwlifting\rvmini\riscv-mini\gtkwave\fv_signals_induct.gtkw"
+[timestart] 0
+[size] 1920 1017
+[pos] -1 -1
+*-3.907605 21 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] FormalInduct.
+[treeopen] FormalInduct.coretop.
+[treeopen] FormalInduct.coretop.core.
+[treeopen] FormalInduct.coretop.core.dpath.
+[sst_width] 211
+[signals_width] 276
+[sst_expanded] 1
+[sst_vpaned_height] 302
+@28
+FormalInduct.coretop.clock
+FormalInduct.coretop.reset
+@22
+[color] 3
+FormalInduct.coretop.dcache.io_req_bits_addr[31:0]
+[color] 3
+FormalInduct.coretop.dcache.io_req_bits_data[31:0]
+[color] 3
+FormalInduct.coretop.dcache.io_req_bits_mask[3:0]
+[color] 3
+FormalInduct.coretop.dcache.io_resp_bits_data[31:0]
+[color] 1
+FormalInduct.coretop.core.dpath.csr.io_host_tohost[31:0]
+@28
+[color] 1
+FormalInduct.coretop.core.dpath.csr.io_expt
+@22
+[color] 1
+FormalInduct.coretop.core.dpath.csr.io_evec[31:0]
+[color] 1
+FormalInduct.coretop.core.dpath.csr.io_epc[31:0]
+@23
+FormalInduct.coretop.core.dpath.regFile.regs<0c>[31:0]
+[pattern_trace] 1
+[pattern_trace] 0

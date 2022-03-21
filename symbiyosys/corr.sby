@@ -5,6 +5,7 @@ taskBMC_coreext task_bmc task_corr_coreext
 taskProve task_prove task_corr
 taskProve_core task_prove task_corr_core
 taskProve_coreext task_prove task_corr_coreext
+taskInduct_coreext task_induct task_corr_coreext_induct
 
 [options]
 task_prove: 
@@ -13,7 +14,12 @@ mode prove
 
 task_bmc:
 mode bmc
-depth 17
+depth 20
+--
+
+task_induct:
+mode prove
+depth 8
 --
 
 [engines]
@@ -23,6 +29,10 @@ smtbmc boolector
 
 task_prove:
 abc pdr
+--
+
+task_induct:
+smtbmc yices
 --
 
 [script]
@@ -42,6 +52,11 @@ read -formal CoreTop.v
 prep -top FormalCoreTop
 --
 
+task_corr_coreext_induct:
+read -formal FormalInduct.v
+read -formal CoreTop.v
+prep -top FormalInduct
+--
 
 [files]
 task_corr:
@@ -57,4 +72,9 @@ FormalCore.v
 task_corr_coreext:
 CoreTop.v
 FormalCoreTop.v
+--
+
+task_corr_coreext_induct:
+CoreTop.v
+FormalInduct.v
 --

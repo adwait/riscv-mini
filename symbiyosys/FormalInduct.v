@@ -1,10 +1,11 @@
-module FormalCoreTop (
+module FormalInduct (
     input           clock,
     input           start,
 
     // ,
     //   instruction related inputs
     input [11:0]    imm_field
+
 );
 
     `define NUMINST 8
@@ -90,6 +91,7 @@ module FormalCoreTop (
     assign ct_io_host_fromhost_bits = io_host_fromhost_bits;
     assign ct_io_host_tohost = io_host_tohost;
 
+
 	reg [`CTR_WIDTH-1:0] counter;
     reg first_cycle;
     reg [31:0] prev_io_io_icache_req_bits_addr;
@@ -114,6 +116,7 @@ module FormalCoreTop (
     reg [11:0] pp_imm;
     reg [11:0] ppp_imm;
     reg [11:0] pppp_imm;
+
 
     initial begin
         counter = `CTR_WIDTH'd0;
@@ -175,17 +178,19 @@ module FormalCoreTop (
             end else begin
                 reset <= 0;
                 io_io_icache_resp_valid <= 1'd1;
-                // io_io_icache_resp_bits_data <= inst_stream[io_io_icache_req_bits_addr];
-                io_io_icache_resp_bits_data <= {imm_field, 20'h60613};
+                io_io_icache_resp_bits_data <= inst_stream[io_io_icache_req_bits_addr];
+                // io_io_icache_resp_bits_data <= {imm_field, 20'h60613};
             end
         end else begin
             io_io_icache_resp_valid <= 1'd1;
-            // io_io_icache_resp_bits_data <= inst_stream[io_io_icache_req_bits_addr];
-            io_io_icache_resp_bits_data <= {imm_field, 20'h60613};
+            io_io_icache_resp_bits_data <= inst_stream[io_io_icache_req_bits_addr];
+            // io_io_icache_resp_bits_data <= {imm_field, 20'h60613};
         end
 
 `ifdef FORMAL
-        fail: assert(first_cycle || (old_lft_tile_regs_12 + {{20{pppp_imm[11]}}, pppp_imm} == lft_tile_regs_12));
+        fail: assert(first_cycle || (old_lft_tile_regs_12 + 32'd200 == lft_tile_regs_12));
+        // assert();
+        // fail: assert(first_cycle || (old_lft_tile_regs_12 + {{20{pppp_imm[11]}}, pppp_imm} == lft_tile_regs_12));
 `endif
     end
 
@@ -193,160 +198,160 @@ module FormalCoreTop (
 
 
     // Abstract system
+//     reg     prev_start, started;
+//     reg     i0_active, i0_started;
 
-    reg     prev_start, started;
-    reg     i0_active, i0_started;
+//     wire    trigger;
+//     assign  trigger = !prev_start && start;
 
-    wire    trigger;
-    assign  trigger = !prev_start && start;
-
-    reg [31:0]  i0_pc;
-    reg [31:0]  i0_inst;
-    reg         i0_started;
-    reg         i0_active, i0_check_0, i0_check_1, i0_check_2;
+//     reg [31:0]  i0_pc;
+//     reg [31:0]  i0_inst;
+//     reg         i0_started;
+//     reg         i0_active, i0_check_0, i0_check_1, i0_check_2;
 
 
-    initial begin
-        prev_start = 0;
-        started = 0;
+//     initial begin
+//         prev_start = 0;
+//         started = 0;
 
-        i0_started = 0;
-        i0_active = 0;
-        i0_check_0 = 0;
-        i0_check_1 = 0;
-        i0_check_2 = 0;
-    end
-    always @(posedge clock) begin
-        prev_start <= start;
-        started <= started || trigger;
+//         i0_started = 0;
+//         i0_active = 0;
+//         i0_check_0 = 0;
+//         i0_check_1 = 0;
+//         i0_check_2 = 0;
+//     end
+//     always @(posedge clock) begin
+//         prev_start <= start;
+//         started <= started || trigger;
 
-        if ((!first_cycle) && started && !i0_started) begin
-            i0_pc <= lft_tile_npc;
-            // TODO: i0_inst??
-            i0_started <= 1;
-            i0_active <= 1;
-        end else if ((lft_tile_ew_pc == i0_pc) && i0_active) begin
-            i0_active <= 0;
-        end
-    end
+//         if ((!first_cycle) && started && !i0_started) begin
+//             i0_pc <= lft_tile_npc;
+//             // TODO: i0_inst??
+//             i0_started <= 1;
+//             i0_active <= 1;
+//         end else if ((lft_tile_ew_pc == i0_pc) && i0_active) begin
+//             i0_active <= 0;
+//         end
+//     end
 
-	// define get_i_imm(inst : inst_t) : bv12 = inst[31:20];
-	// and extends it with sign
-	function [31:0] get_i_imm;
-		input [31:0] inst;
-		begin
-			get_i_imm = {{20{inst[31]}}, inst[31:20]};
-		end
-	endfunction
+// 	// define get_i_imm(inst : inst_t) : bv12 = inst[31:20];
+// 	// and extends it with sign
+// 	function [31:0] get_i_imm;
+// 		input [31:0] inst;
+// 		begin
+// 			get_i_imm = {{20{inst[31]}}, inst[31:20]};
+// 		end
+// 	endfunction
 	
-	// define get_s_imm(inst : inst_t) : bv12 = inst[31:25] ++ inst[11:7];
-	function [31:0] get_s_imm;
-		input [31:0] inst;
-		begin
-			get_s_imm = {{20{inst[31]}}, inst[31:25], inst[11:7]};
-		end
-	endfunction
-	// define get_rd(inst : inst_t) : reg_addr_t = inst[11:7];
-	function [4:0] get_rd;
-		input [31:0] inst;
-		begin
-			get_rd = inst[11:7];
-		end
-	endfunction
-    // define get_rs1(inst : inst_t) : reg_addr_t = inst[19:15];
-	function [4:0] get_rs1 (input [31:0] inst);
-		begin
-			get_rs1 = inst[19:15];
-		end
-	endfunction
-	// define get_rs2(inst : inst_t) : reg_addr_t = inst[24:20];
-	function [4:0] get_rs2 (input [31:0] inst);
-		begin
-			get_rs2 = inst[24:20];
-		end
-	endfunction
+// 	// define get_s_imm(inst : inst_t) : bv12 = inst[31:25] ++ inst[11:7];
+// 	function [31:0] get_s_imm;
+// 		input [31:0] inst;
+// 		begin
+// 			get_s_imm = {{20{inst[31]}}, inst[31:25], inst[11:7]};
+// 		end
+// 	endfunction
+// 	// define get_rd(inst : inst_t) : reg_addr_t = inst[11:7];
+// 	function [4:0] get_rd;
+// 		input [31:0] inst;
+// 		begin
+// 			get_rd = inst[11:7];
+// 		end
+// 	endfunction
+//     // define get_rs1(inst : inst_t) : reg_addr_t = inst[19:15];
+// 	function [4:0] get_rs1 (input [31:0] inst);
+// 		begin
+// 			get_rs1 = inst[19:15];
+// 		end
+// 	endfunction
+// 	// define get_rs2(inst : inst_t) : reg_addr_t = inst[24:20];
+// 	function [4:0] get_rs2 (input [31:0] inst);
+// 		begin
+// 			get_rs2 = inst[24:20];
+// 		end
+// 	endfunction
 
 
-	reg [31:0] 	txn__imm;
-	reg [31:0] 	txn__regfile [0:31];
-	reg [4:0]  	txn__reg_rd1_addr_in;
-	reg [4:0]  	txn__reg_rd2_addr_in;
-	reg [31:0] 	txn__reg_rd1_data_out;
-	reg [31:0] 	txn__reg_rd2_data_out;
-	reg [4:0]	txn__reg_wr_addr_in;
-	reg [31:0]	txn__reg_wr_data_in;
-	reg [31:0]	txn__alu_out;
-    wire rs1hazard = 1;
-    // wire ts2hazard = ?;
+// 	reg [31:0] 	txn__imm;
+// 	reg [31:0] 	txn__regfile [0:31];
+// 	reg [4:0]  	txn__reg_rd1_addr_in;
+// 	reg [4:0]  	txn__reg_rd2_addr_in;
+// 	reg [31:0] 	txn__reg_rd1_data_out;
+// 	reg [31:0] 	txn__reg_rd2_data_out;
+// 	reg [4:0]	txn__reg_wr_addr_in;
+// 	reg [31:0]	txn__reg_wr_data_in;
+// 	reg [31:0]	txn__alu_out;
+//     wire rs1hazard = 1;
 
-    wire [1023:0] 	txn__regfile_flat;
-    generate
-        for (i_flat = 0 ; i_flat < 32; i_flat=i_flat+1) begin
-            assign txn__regfile_flat[i_flat*32+31:i_flat*32] = txn__regfile[i_flat];
-        end
-    endgenerate
+//     wire [1023:0] 	txn__regfile_flat;
+//     generate
+//         for (i_flat = 0 ; i_flat < 32; i_flat=i_flat+1) begin
+//             assign txn__regfile_flat[i_flat*32+31:i_flat*32] = txn__regfile[i_flat];
+//         end
+//     endgenerate
 
 
-	always @(posedge clock ) begin
-        if ((lft_tile_pc == i0_pc) && i0_active) begin
-            // decode_i_imm
-			txn__imm = get_i_imm(lft_tile_inst);
-            // decode_rs_addr
-            txn__reg_rd1_addr_in = get_rs1(lft_tile_inst);
-            txn__reg_rd2_addr_in = get_rs2(lft_tile_inst);
-            // regs_read
-            txn__reg_rd1_data_out = rs1hazard ? txn__alu_out : txn__regfile[txn__reg_rd1_addr_in];
-            txn__reg_rd2_data_out = rs2hazard ? txn__alu_out : txn__regfile[txn__reg_rd2_addr_in];
-            // alu_compute_add_rs_imm
-            txn__alu_out = txn__imm + txn__reg_rd1_data_out;
+// 	always @(posedge clock ) begin
+//         if ((lft_tile_pc == i0_pc) && i0_active) begin
+//             // decode_i_imm
+// 			txn__imm = get_i_imm(lft_tile_inst);
+//             // decode_rs_addr
+//             txn__reg_rd1_addr_in = get_rs1(lft_tile_inst);
+//             txn__reg_rd2_addr_in = get_rs2(lft_tile_inst);
+//             // regs_read
+//             txn__reg_rd1_data_out = rs1hazard ? txn__alu_out : txn__regfile[txn__reg_rd1_addr_in];
+//             txn__reg_rd2_data_out = txn__regfile[txn__reg_rd2_addr_in];
+//             // alu_compute_add_rs_imm
+//             txn__alu_out = txn__imm + txn__reg_rd1_data_out;
 
-            i0_check_0 <= 1;
-        end else begin
-            i0_check_0 <= 0;
-        end
+//             i0_check_0 <= 1;
+//         end else begin
+//             i0_check_0 <= 0;
+//         end
 
-		if ((lft_tile_fe_pc == i0_pc) && i0_active) begin
-            // feed__alu_out__reg_rd_data_in
-            txn__reg_wr_data_in = txn__alu_out;
-            // decode_rd_addr
-			txn__reg_wr_addr_in = get_rd(lft_tile_fe_inst); 
+// 		if ((lft_tile_fe_pc == i0_pc) && i0_active) begin
+//             // feed__alu_out__reg_rd_data_in
+//             txn__reg_wr_data_in = txn__alu_out;
+//             // decode_rd_addr
+// 			txn__reg_wr_addr_in = get_rd(lft_tile_fe_inst); 
 
-            i0_check_1 <= 1;
-        end else begin
-            i0_check_1 <= 0;
-        end
+//             i0_check_1 <= 1;
+//         end else begin
+//             i0_check_1 <= 0;
+//         end
 
-		if ((lft_tile_ew_pc == i0_pc) && i0_active)	begin
-			// regs_write
-            txn__regfile[txn__reg_wr_addr_in] = txn__reg_wr_data_in;
+// 		if ((lft_tile_ew_pc == i0_pc) && i0_active)	begin
+// 			// regs_write
+//             txn__regfile[txn__reg_wr_addr_in] = txn__reg_wr_data_in;
 
-            i0_check_2 <= 1;
-        end else begin
-            i0_check_2 <= 0;
-		end
-	end
+//             i0_check_2 <= 1;
+//         end else begin
+//             i0_check_2 <= 0;
+// 		end
+// 	end
 
-`ifdef FORMAL
-    always @(posedge clock) begin
+// `ifdef FORMAL
+//     always @(posedge clock) begin
 
-        if ((lft_tile_pc == i0_pc) && i0_active) begin
-            assume(txn__alu_out == lft_tile_alu_data_out);
-            assume(txn__regfile_flat == lft_tile_regfile);
-        end
+//         if ((lft_tile_pc == i0_pc) && i0_active) begin
+//             assume(txn__alu_out == lft_tile_alu_data_out);
+//             assume(txn__regfile_flat == lft_tile_regfile);
+//         end
 
-        if (i0_check_0) begin
-            check_0_0_0:    assert(txn__alu_out == lft_tile_alu_data_out);
-            check_0_0_1:    assert(txn__reg_rd1_data_out == lft_tile_reg_rd1_data_out);
-            // check_0_0_2:    assert(txn__reg_rd2_data_out == lft_tile_reg_rd2_data_out);
-        end
-        if (i0_check_1) begin
-            check_0_1_0:    assert(txn__reg_wr_data_in == lft_tile_reg_wr_data_in);
-            check_0_1_1:    assert(txn__reg_wr_addr_in == lft_tile_reg_wr_addr_in);
-        end
-        if (i0_check_2) begin
-            check_0_2_0:    assert(txn__regfile[txn__reg_wr_addr_in] == lft_regfile_mem[txn__reg_wr_addr_in]);
-        end
-    end
-`endif
+//         if (i0_check_0) begin
+//             check_0_0_0:    assert(txn__alu_out == lft_tile_alu_data_out);
+//             check_0_0_1:    assert(txn__reg_rd1_data_out == lft_tile_reg_rd1_data_out);
+//             check_0_0_2:    assert(txn__reg_rd2_data_out == lft_tile_reg_rd2_data_out);
+//         end
+//         if (i0_check_1) begin
+//             check_0_1_0:    assert(txn__reg_wr_data_in == lft_tile_reg_wr_data_in);
+//             check_0_1_1:    assert(txn__reg_wr_addr_in == lft_tile_reg_wr_addr_in);
+//         end
+//         if (i0_check_2) begin
+//             check_0_2_0:    assert(txn__regfile[txn__reg_wr_addr_in] == lft_regfile_mem[txn__reg_wr_addr_in]);
+//         end
+
+//     end
+// `endif
+
 	
 endmodule
